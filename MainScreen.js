@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Alert }
 
 // TODO : try to make input border bigger when it is empty
 // TODO : make a general function for displaying alert box -- maybe 
+// TODO : check if Throw is working properly
+// TODO : Add throws instead of alert box wherever you can
+// TODO : code cleanup and refactoring
 
 export default function MainScreen({ navigation }) {
     
@@ -136,7 +139,7 @@ export default function MainScreen({ navigation }) {
 
   const equalsTo = () => {
 
-    // check if empty (only one empty value allowed)
+    // check if empty (only one empty value allowed) --> done
     // check for power sign and change it to ** --> done
     var totalEmpty = 0;
     var inputArray = [bgnTxt];
@@ -144,106 +147,108 @@ export default function MainScreen({ navigation }) {
 
     var decDigits = 2;
 
-    if (!pvInputTxt) {
+    if (!pvInputTxt) { // pv field is empty
       emptyField = "pv";
-      // inputArray.push("");
       totalEmpty += 1;
     } else {
       try {
         var pvEval = eval(pvInputTxt.replace(/\^/g, "**"));
-        setPv(pvEval.toString()); // design choice if you want to do this or not
+        setPv(pvEval.toString());
         inputArray.push(pvEval);
       } catch(e) {
         Alert.alert(
           "PV Input Error",
-          e.message,
+          e.message.replace(/\*\*/g, "^"),
           { cancelable: false }
         );
         return;
       }
     }
 
-    if (!fvInputTxt) {
+    if (!fvInputTxt) { // fv is empty
       emptyField = "fv";
-      // inputArray.push("");
       totalEmpty += 1;
     } else {
       try {
         var fvEval = eval(fvInputTxt.replace(/\^/g, "**"));
-        setFv(fvEval.toString()); // design choice if you want to do this or not
+        setFv(fvEval.toString());
         inputArray.push(fvEval);
       } catch(e) {
         Alert.alert(
           "FV Input Error",
-          e.message,
+          e.message.replace(/\*\*/g, "^"),
           { cancelable: false }
         );
         return;
       }
     }
 
-    // handle n has to be positive integer
-    if (!nInputTxt) {
+    // handle n has to be positive integer --> done
+    if (!nInputTxt) { // n is empty
       emptyField = "n";
-      // inputArray.push("");
       totalEmpty += 1;
     } else {
       try {
         var nEval = eval(nInputTxt.replace(/\^/g, "**"));
-        if (Number.isInteger(nEval) && nEval > 0) {
-          setN(nEval.toString()); // design choice if you want to set evaluated string
-          inputArray.push(nEval);
-        } else {
-          Alert.alert(
-            "N Input Error",
-            "Number of compunding periods has to be a positive integer",
-            { cancelable: false }
-          );
-          return;
-        }
+        if (!Number.isInteger(nEval) || nEval <= 0) {
+            Alert.alert(
+                "N Input Error",
+                "Number of compunding periods has to be a positive integer",
+                { cancelable: false }
+            );
+            return;
+        } 
+        setN(nEval.toString());
+        inputArray.push(nEval);
       } catch(e) {
         Alert.alert(
           "N Input Error",
-          e.message,
+          e.message.replace(/\*\*/g, "^"),
           { cancelable: false }
         );
         return;
       }
     }
 
-    // percentage should be between -100 and 0 and 100 -- decide later -- maybe just keep positive 0 to 100 values
-    if (!rInputTxt) {
+    // percentage should be between 0 and 100 --> done
+    if (!rInputTxt) { // r is empty
       emptyField = "r";
-      // inputArray.push("");
       totalEmpty += 1;
     } else {
       try {
         var rEval = eval(rInputTxt.replace(/\^/g, "**"));
-        setR(rEval.toString()); // design choice if you want to do this or not
+        if (rEval < 0 || rEval > 100) {
+            Alert.alert(
+                "R Input Error",
+                "R values should be between 0 and 100",
+                { cancelable: false }
+            );
+            return;
+        }
+        setR(rEval.toString()); 
         inputArray.push(rEval);
       } catch(e) {
         Alert.alert(
           "R Input Error",
-          e.message,
+          e.message.replace(/\*\*/g, "^"),
           { cancelable: false }
         );
         return;
       }
     }
 
-    if (!pmtInputTxt) {
+    if (!pmtInputTxt) { // pmt is empty
       emptyField = "pmt";
-      // inputArray.push("");
       totalEmpty += 1;
     } else {
       try {
         var pmtEval = eval(pmtInputTxt.replace(/\^/g, "**"));
-        setPmt(pmtEval.toString()); // design choice if you want to do this or not
+        setPmt(pmtEval.toString()); 
         inputArray.push(pmtEval);
       } catch(e) {
         Alert.alert(
           "PMT Input Error",
-          e.message,
+          e.message.replace(/\*\*/g, "^"),
           { cancelable: false }
         );
         return;
@@ -258,10 +263,9 @@ export default function MainScreen({ navigation }) {
       );
       return;
     } else {
-      // comment this out later
-      console.log("correct input");
-      console.log(emptyField);
-      console.log(inputArray);
+    //   console.log("correct input");
+    //   console.log(emptyField);
+    //   console.log(inputArray);
       try {
         if (emptyField == "pv") {
           setInput("pv");
@@ -287,6 +291,7 @@ export default function MainScreen({ navigation }) {
           e.message,
           { cancelable: false }
         );
+        return;
       }
     }
   }
@@ -580,7 +585,7 @@ const calculatePmt = (inputArg) => {
   }
 }
 
-// handle r == 0
+// handle r == 0 --> done
 // handle pmt == 0 --> done
 const calculateN = (inputArg) => {
   var pvValue = inputArg[1];
@@ -589,17 +594,24 @@ const calculateN = (inputArg) => {
   var oneR = 1 + rValue;
   var pmtValue = inputArg[4];
 
-  // todo: fv and pv can't have the same sign when pmt is zero
-  // todo: future value or pv can't be zero
+  // todo: fv and pv can't have the same sign when pmt is zero --> done
+  // todo: future value or pv can't be zero when pmt is zero --> done
   if (pmtValue == 0) {
     if (rValue == 0){
-      // check if pv == fv or send alert
+      // check if pv == -fv or send alert --> done
+      if (pvValue != -fvValue) {
+        throw "No feasible N value for given input";
+      } 
       return 0;
+    } else {
+        if (pvValue*fvValue >= 0) {
+            throw "FV and PV can't have same sign if Pmt = 0";
+        } 
+        return (Math.log(-(fvValue/pvValue)) / Math.log(oneR));
     }
-    return (Math.log(-(fvValue/pvValue)) / Math.log(oneR)); 
   }
 
-  // pmt and totalFV should have opposite signs
+  // pmt and totalFV should have opposite signs ################ pending - check this condition again ############################
   if (inputArg[0] == "END") {
     return ( (Math.log(((pmtValue)-(fvValue*rValue)) / ((pvValue*rValue)+(pmtValue))) / Math.log(oneR)) );
   } else {
@@ -608,13 +620,17 @@ const calculateN = (inputArg) => {
   
 }
 
+// fix this formula --> pending ################# works only in one direction right now ###################
 const calculateR = (inputArg) => {
   var pvValue = inputArg[1];
   var fvValue = inputArg[2];
   var nValue = inputArg[3];
   var pmtValue = inputArg[4];
 
-  if (pmtValue == 0) { // pv and fv should have opposite signs
+  if (pmtValue == 0) { // pv and fv should have opposite signs and shouldn't be zero --> done
+    if (pvValue*fvValue >= 0) {
+        throw "FV and PV can't have same sign if Pmt = 0";
+    } 
     return (((-fvValue/pvValue) ** (1/nValue)) - 1);
   }
 
@@ -622,7 +638,7 @@ const calculateR = (inputArg) => {
 
   var difference = 0;
   if (inputArg[0] == "END") {
-    for (var i = 0; i < 100; i += increment) { // maybe do negative rates as well
+    for (var i = 0; i < 100; i += increment) { 
       var oneR_test = (i / 100) + 1;
       var pvCompund = pvValue*(oneR_test);
 
@@ -647,7 +663,7 @@ const calculateR = (inputArg) => {
       }
     }
   } else {
-    for (var i = 0; i < 100; i += increment) { // maybe do negative rates as well
+    for (var i = 0; i < 100; i += increment) { 
       var oneR_test = (i / 100) + 1;
       var pvCompund = pvValue;
 
@@ -670,8 +686,8 @@ const calculateR = (inputArg) => {
       }
     }
   }
-
-  return 0; // throw exception here if no approriate value found -- TODO
+  // throw exception here if no approriate value found --> done
+  throw "R value not found between 0 and 100";
 }
 
 const styles = StyleSheet.create({
