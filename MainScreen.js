@@ -611,16 +611,25 @@ const calculateN = (inputArg) => {
     }
   }
 
-  // pmt and totalFV should have opposite signs ################ pending - check this condition again ############################
-  if (inputArg[0] == "END") {
-    return ( (Math.log(((pmtValue)-(fvValue*rValue)) / ((pvValue*rValue)+(pmtValue))) / Math.log(oneR)) );
-  } else {
-    return ( (Math.log(((pmtValue*oneR)-(fvValue*rValue)) / ((pvValue*rValue)+(pmtValue*oneR))) / Math.log(oneR)) );
+  if (rValue == 0) {
+      return -((pvValue+fvValue)/pmtValue);
   }
-  
+
+  // check if log numerator is negative --> done
+  // these formulas aren't found online, rather are deduced by converting other formulas and making n the subject.
+  var numerator = 0;
+  if (inputArg[0] == "END") {
+    numerator = ((pmtValue)-(fvValue*rValue)) / ((pvValue*rValue)+(pmtValue));
+  } else {
+    numerator = ((pmtValue*oneR)-(fvValue*rValue)) / ((pvValue*rValue)+(pmtValue*oneR));
+  }
+
+  if (numerator < 0) {
+      throw "Error in sign of input values";
+  }
+  return ( Math.log(numerator) / Math.log(oneR) );
 }
 
-// fix this formula --> pending ################# works only in one direction right now ###################
 const calculateR = (inputArg) => {
   var pvValue = inputArg[1];
   var fvValue = inputArg[2];
@@ -656,13 +665,17 @@ const calculateR = (inputArg) => {
         difference = Math.abs(fvValue - (-pvCompund));
       } else {
         if (Math.abs(fvValue - (-pvCompund)) > difference) {
-          return (i - increment);
+            var toret = i - increment;
+            if (toret == 0) { // correct rate of return is negative
+                throw "R value not found between 0 and 100";
+            }
+            return toret;
         } else {
           difference = Math.abs(fvValue - (-pvCompund));
         }
       }
     }
-  } else {
+  } else { // BGN mode
     for (var i = 0; i < 100; i += increment) { 
       var oneR_test = (i / 100) + 1;
       var pvCompund = pvValue;
@@ -679,7 +692,11 @@ const calculateR = (inputArg) => {
         difference = Math.abs(fvValue - (-pvCompund));
       } else {
         if (Math.abs(fvValue - (-pvCompund)) > difference) {
-          return (i - increment);
+            var toret = i - increment;
+            if (toret == 0) { // correct rate of return is negative
+                throw "R value not found between 0 and 100";
+            }
+            return toret;
         } else {
           difference = Math.abs(fvValue - (-pvCompund));
         }

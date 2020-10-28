@@ -22,7 +22,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adityakhairari.financialcalculator"
+    },
+    "android": {
+      "package": "com.adityakhairari.financialcalculator"
     }
   }
 }
