@@ -7,7 +7,8 @@ import * as Formulas from './Formulas'
 // TODO : make a general function for displaying alert box -- maybe 
 // TODO : check if Throw is working properly
 // TODO : Add throws instead of alert box wherever you can
-// TODO : refactoring view rendering
+// TODO : refactoring view rendering, input handling.
+// TODO : try to do cursor and disable native keyboard --> last
 
 export default function MainScreen({ navigation }) {
     
@@ -36,7 +37,7 @@ export default function MainScreen({ navigation }) {
 
   const [selectedInp, setInput] = useState("pv");
 
-  const [bgnTxt, setMode] = useState("BGN");
+  const [bgnTxt, setMode] = useState("END");
 
   const toggleTheme = () => {
     if (theme == "dark") {
@@ -128,11 +129,19 @@ export default function MainScreen({ navigation }) {
   }
 
   const toggleMode = () => {
+    var modeTxt = "";
     if (bgnTxt == "BGN") {
       setMode("END");
+      modeTxt = "END";
     } else {
       setMode("BGN");
+      modeTxt = "BGN";
     }
+    Alert.alert(
+      "Calculation mode changed!",
+      "Now using " + modeTxt + " mode for TVM calculations",
+      { cancelable: false }
+    );
   }
 
   const equalsTo = () => {
