@@ -1,5 +1,6 @@
 import React , { useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Alert } from 'react-native';
+import {Colors} from './Colors';
 
 // TODO : try to make input border bigger when it is empty
 // TODO : make a general function for displaying alert box -- maybe 
@@ -9,24 +10,20 @@ import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Alert }
 
 export default function MainScreen({ navigation }) {
     
-  var bgColor = "black";
+  var bgColor = Colors.darkBg;
+  var numButtonColor = Colors.darkB1;
+  var opButtonColor = Colors.darkB2;
+  var sysButtonColor = Colors.darkB3;
 
-  var numButtonColor = "silver";
-  var opButtonColor = "orange";
-  var sysButtonColor = "slategray";
-
-  // var numTxtColor = "";
-  // var opTxtColor = "";
-  // var sysTxtColor = "";
-  var inpTxtColor = "white";
+  var inpTxtColor = Colors.darkInpTxt;
 
   var themeTxt = "Light Mode";
 
-  var pvBorderColor = "black";
-  var fvBorderColor = "black";
-  var nBorderColor = "black";
-  var rBorderColor = "black";
-  var pmtBorderColor = "black";
+  var pvBorderColor = Colors.darkBorderUnselect;
+  var fvBorderColor = Colors.darkBorderUnselect;
+  var nBorderColor = Colors.darkBorderUnselect;
+  var rBorderColor = Colors.darkBorderUnselect;
+  var pmtBorderColor = Colors.darkBorderUnselect;
 
   const [theme, setTheme] = useState("dark");
 
@@ -47,36 +44,36 @@ export default function MainScreen({ navigation }) {
     return  "dark";
   }
 
-  if (theme == "dark") {
-    bgColor = "black";
-    numButtonColor = "silver";
-    opButtonColor = "orange";
-    sysButtonColor = "slategray";
-    // numTxtColor = "";
-    // opTxtColor = "";
-    // sysTxtColor = "";
-    inpTxtColor = "white";
+  if (theme == "dark") { // dark theme setup
     themeTxt = "Light Mode";
-    pvBorderColor = (selectedInp == "pv")? "white" : "black";
-    fvBorderColor = (selectedInp == "fv")? "white" : "black";
-    nBorderColor = (selectedInp == "n")? "white" : "black";
-    rBorderColor = (selectedInp == "r")? "white" : "black";
-    pmtBorderColor = (selectedInp == "pmt")? "white" : "black";
-  } else {
-    bgColor = "white";
-    numButtonColor = "whitesmoke";
-    opButtonColor = "orange";
-    sysButtonColor = "steelblue";
-    // numTxtColor = "";
-    // opTxtColor = "";
-    // sysTxtColor = "";
-    inpTxtColor = "black";
+
+    inpTxtColor = Colors.darkInpTxt;
+
+    bgColor = Colors.darkBg;
+    numButtonColor = Colors.darkB1;
+    opButtonColor = Colors.darkB2;
+    sysButtonColor = Colors.darkB3;
+    
+    pvBorderColor = (selectedInp == "pv")? Colors.darkBorderSelect : Colors.darkBorderUnselect;
+    fvBorderColor = (selectedInp == "fv")? Colors.darkBorderSelect : Colors.darkBorderUnselect;
+    nBorderColor = (selectedInp == "n")? Colors.darkBorderSelect : Colors.darkBorderUnselect;
+    rBorderColor = (selectedInp == "r")? Colors.darkBorderSelect : Colors.darkBorderUnselect;
+    pmtBorderColor = (selectedInp == "pmt")? Colors.darkBorderSelect : Colors.darkBorderUnselect;
+  } else { // light theme setup
     themeTxt = "Dark Mode";
-    pvBorderColor = (selectedInp == "pv")? "black" : "white";
-    fvBorderColor = (selectedInp == "fv")? "black" : "white";
-    nBorderColor = (selectedInp == "n")? "black" : "white";
-    rBorderColor = (selectedInp == "r")? "black" : "white";
-    pmtBorderColor = (selectedInp == "pmt")? "black" : "white";
+  
+    inpTxtColor = Colors.lightInpTxt;
+
+    bgColor = Colors.lightBg;
+    numButtonColor = Colors.lightB1;
+    opButtonColor = Colors.lightB2;
+    sysButtonColor = Colors.lightB3;
+
+    pvBorderColor = (selectedInp == "pv")? Colors.lightBorderSelect : Colors.lightBorderUnselect;
+    fvBorderColor = (selectedInp == "fv")? Colors.lightBorderSelect : Colors.lightBorderUnselect;
+    nBorderColor = (selectedInp == "n")? Colors.lightBorderSelect : Colors.lightBorderUnselect;
+    rBorderColor = (selectedInp == "r")? Colors.lightBorderSelect : Colors.lightBorderUnselect;
+    pmtBorderColor = (selectedInp == "pmt")? Colors.lightBorderSelect : Colors.lightBorderUnselect;
   }
 
   const clearInput = () => {

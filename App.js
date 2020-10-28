@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler'; // this should always be the first line no matter what!!
 import React , { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Alert } from 'react-native';
+// import { StyleSheet, Text, View, SafeAreaView, Button, TouchableOpacity, Alert } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
