@@ -7,3 +7,10 @@ So this is my attempt at building a Financial calculator with an intuitive UI th
 # Additional Features
 * Dark Mode
 * Cash flow table for calculating Net Present Value (NPV) and Internal Rate of Return (IRR)
+# Screenshots
+## Light Mode
+![Light Mode Screen](./screenshots/Light_mode_screen.png)
+## Dark Mode
+![Dark Mode Screen](./screenshots/Dark_mode_screen.png)
+## Cash Flow Table
+![Cash Flow Screen](./screenshots/Cash_flow_screen.png)
